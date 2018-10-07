@@ -13,6 +13,12 @@ This class will work best for systems with larger momentum, but the uncertaintie
 -The uncertainty on the integral is negligable compared to the derivative, as it is proportional to a thousandth of the upper bound of the 4th derivative on the 	interval in question and to the 5th power of the width (time difference) of the integrated interval.
 
 
+/*
+	to ensure that damping is as close to critical as possibble, the second order ODE has been modeled to return the correct value
+
+
+
+
 
 THIS CLASS WILL ONLY FUNCTION IF IT'S COMPUTE FUNCTION IS CALLED AT A REGULAR INTERVAL.
 USE A TIMER INTERRUPT TO DO SO
