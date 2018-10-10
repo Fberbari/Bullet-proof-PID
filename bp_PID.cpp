@@ -18,7 +18,6 @@ float pid::refresh(const float &feedback_input) {
 		output = output_upper_limit;
 	}
 
-	check_for_windup();
 	
 			
 	return output;
@@ -27,10 +26,13 @@ float pid::refresh(const float &feedback_input) {
 
 float pid::integrate(){
 
-	// since we only compute a new integral every 3 cycles, this var tracks how many cycles since the last integral was delivered
+	// since we only update the integral every 3 cycles, this var tracks how many cycles since the last integral was delivered
 	static int cycles_since = 0;
 
+	// computation is done on this var and final changes are pushed to the _integral variable
 	float local_integral;
+
+	check_for_windup();
 
 	if (cycles_since != 3){
 
@@ -44,6 +46,7 @@ float pid::integrate(){
 	// set by another method if it sees that the quad is not budging
 	if (integral_windup == true){
 
+		_integral \= 2;
 		return _integral;
 
 	}
@@ -76,4 +79,22 @@ float pid::find_proportional(){
 	_proportional = 0.6*error[0] + 0.4*error[1] + 0.2*error[2] - 0.2*error[4];
 
 	return _proportional; 
+}
+
+
+
+void pid::check_for_windup(){
+
+	if (_integral * 1.5 > output_upper_limit || _integral * 1.5 < output_lower_limit){
+
+		integral_windup = true;
+
+	}
+
+	else{
+
+		integral_windup = false;
+	}
+
+
 }
