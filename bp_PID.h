@@ -1,5 +1,3 @@
-#include <avr\io.h>
-
 #ifndef BP_PID_H
 #define BP_PID_H
 
@@ -12,6 +10,12 @@
 *	The differentiatiator produces error order 2
 *	 the proportional calculation produces error of order 2
 ************************************************/
+
+
+// this is the time between taken sensor data
+// Must be defined
+// recommended unit is seconds, but anything will work
+#define time_between_calls
 
 
 
@@ -35,7 +39,7 @@ class pid{
 			Notes:
 				
             *****************************************************************/
-            PID();
+            pid();
 
             /****************************************************************
 			Arguments:
@@ -53,7 +57,7 @@ class pid{
 			Notes:
 				THese will eventually be fine tuned to provide the best response but it is recommended that a second order DE be solved to get close to critcal damping
             *****************************************************************/
-            void setWeights(const float &Kp, const float &Ki, const float &Kd);
+            void setWeights(const float kp, const float ki, const float kd);
 
             /****************************************************************
 			Arguments:
@@ -66,13 +70,12 @@ class pid{
 				nothing
 
 			Description:
-				c
+				stores these into provate variables that will be used by the refresh method
 
 			Notes:
 				
             *****************************************************************/
-            void setOutputLowerLimit(const float &output_lower_limit);
-            void setOutputUpperLimit(const float &output_upper_limit);
+            void setOutputLimits(const float output_lower_limit, const float output_upper_limit);
 
             // MUST USE EVERYTIME BEFORE COMPUTATION
             // udates the data of pilot intention and current position
@@ -89,11 +92,12 @@ class pid{
 
 			Description:
 				substracts the actual point from the disered point andstores that data into the error array
+				updates the entire array to reflect that new datahas arrived
 	
 			Notes:
 				This must be called every time the loop runs so as to ensure data gets updated real time
             *****************************************************************/
-            void setPoints(const float &desired_point, const float &actual_point);
+            void setPoints(const float desired_point, const float actual_point);
 
 	       	/****************************************************************
 			Arguments:
@@ -129,6 +133,7 @@ class pid{
 
             // stores the previous 5 errors, for use in integral, derivativative and current error calculations
             // This array should be accessed circularly
+            // THe newest data is held at error[0]
             float error[5];
 
             // stores the weight constants
