@@ -85,7 +85,7 @@ float pid::integrate(){
 
 		return _integral;
 
-	}
+	}return
 
 	// apply simpson's rule
 	local_integral = (5 * time_between_calls / 6);

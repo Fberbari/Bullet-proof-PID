@@ -3,19 +3,22 @@
 
 
 /************************************************
-*	This class gathers the pilots intention and the current position of the quad and perfoms the PID algorythim.
-*	It then stores integers that represent percentages in the "motor array"
 *
 *	The integrator levrages simpson's rule to achieve an error of order 3
 *	The differentiatiator produces error order 2
 *	 the proportional calculation produces error of order 2
+*
+*
+*	Please find the license in the github repository 
+*
+*
 ************************************************/
 
 
 // this is the time between taken sensor data
 // Must be defined
 // recommended unit is seconds, but anything will work
-#define time_between_calls
+#define time_between_calls 7
 
 
 
@@ -108,7 +111,7 @@ class pid{
 				
 
 			returns:
-				the output of the controller
+				the output of the controller (a value between output lower limit and output upper limit)
 
 			Description:
 				calls the private "computational functions" and combines their results to produce an ouput
@@ -118,7 +121,6 @@ class pid{
 				ensures the output does not cross the bounds set previously
             *****************************************************************/
             float refresh();
-
 
         private:
 
@@ -139,14 +141,16 @@ class pid{
             // stores the weight constants
             float Kp, Ki, Kd;
 
-            // I/O
-            float output;
+
 
             // computational results
             float _integral;
 			float _derivative;
 			float _proportional;
 
+            // I/O
+            float output;
+            
 			// limits
             float output_upper_limit;
             float output_lower_limit;
